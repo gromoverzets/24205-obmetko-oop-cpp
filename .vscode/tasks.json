@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "build tests",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=c++11",
+                "-g",
+                "-lgtest",
+                "-lgtest_main",
+                "-pthread",
+                "test_word_count.cpp",
+                "-o",
+                "test_word_count"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": "build"
+        }
+    ]
+}
