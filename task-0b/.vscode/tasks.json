@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build with g++",
+      "type": "shell",
+      "command": "C:/mingw64/bin/g++.exe",
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}.exe",
+        "-I", "C:/dev/vcpkg/installed/x64-mingw-static/include",
+        "-L", "C:/dev/vcpkg/installed/x64-mingw-static/lib",
+        "-lgtest",
+        "-lpthread",
+        "-static"  // Добавляем статическую линковку
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}

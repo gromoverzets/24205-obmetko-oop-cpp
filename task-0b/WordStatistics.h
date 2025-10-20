@@ -1,24 +1,22 @@
-#pragma once
+#ifndef WORDSTATISTICS_H
+#define WORDSTATISTICS_H
 
-#include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
+#include <string>
+#include <tuple>
 
 class WordStatistics {
 private:
-    std::unordered_map<std::string, size_t> wordCount;
-    size_t totalWords = 0;
+    const std::map<std::string, int>& wordCount;
+    std::vector<std::pair<std::string, int>> sortedWords;
+    long totalWords;
+
+    void calculateTotal();
 
 public:
-    void addWord(const std::string& word);
-
-    void addWords(const std::vector<std::string>& words);
-
-    size_t getTotalWords() const;
-    
-    size_t getWordCount(const std::string& word) const;
-
-    const std::unordered_map<std::string, size_t>& getWordCountMap() const;
-
-    void clear();
+    WordStatistics(const std::map<std::string, int>& wc);
+    std::vector<std::tuple<std::string, int, double>> getStatistics() const;
 };
+
+#endif

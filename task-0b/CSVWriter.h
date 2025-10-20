@@ -1,15 +1,21 @@
-#pragma once
+#ifndef CSVWRITER_H
+#define CSVWRITER_H
 
-#include <fstream>
-#include <iomanip>
 #include <string>
+#include <fstream>
 #include <vector>
-#include <algorithm>
-#include <unordered_map>
+#include <tuple>
 
 class CSVWriter {
+private:
+    std::string filename;
+    std::ofstream file;
+
 public:
-    void writeWordStatistics(const std::string& filename, 
-                           const std::unordered_map<std::string, size_t>& wordCount,
-                           size_t totalWords) const;
+    CSVWriter(const std::string& filename);
+    void open();
+    void close();
+    void write(const std::vector<std::tuple<std::string, int, double>>& data);
 };
+
+#endif

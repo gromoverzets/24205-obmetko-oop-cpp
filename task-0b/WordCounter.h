@@ -1,25 +1,21 @@
-#pragma once
+#ifndef WORDCOUNTER_H
+#define WORDCOUNTER_H
 
-#include <fstream>
+#include "FileReader.h"
+#include <map>
 #include <string>
-#include "FileReader.cpp"
-#include "WordStatistics.cpp"
-#include "CSVWriter.cpp"
 
 class WordCounter {
 private:
-    WordExtractor extractor;
-    WordStatistics statistics;
-    CSVWriter writer;
+    FileReader& reader;
+    std::map<std::string, int> wordCount;
+    
+    void processLine(const std::string& line);
 
 public:
-    void processFile(const std::string& filename);
-
-    void writeCSV(const std::string& filename) const;
-
-    size_t getTotalWords() const;
-    
-    size_t getWordCount(const std::string& word);
-    
-    void clear();
+    WordCounter(FileReader& reader);
+    void countWords();
+    const std::map<std::string, int>& getWordCount() const;
 };
+
+#endif

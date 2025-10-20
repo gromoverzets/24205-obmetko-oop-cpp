@@ -1,39 +1,29 @@
-#pragma once
+#include "WordStatistics.h"
+#include <algorithm>
 
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-class WordStatistics {
-private:
-    std::unordered_map<std::string, size_t> wordCount;
-    size_t totalWords = 0;
-
-public:
-    void addWord(const std::string& word) {
-        wordCount[word]++;
-        totalWords++;
+WordStatistics::WordStatistics(const std::map<std::string, int>& wc) : wordCount(wc) {
+    calculateTotal();
+    for (const auto& pair : wordCount) {
+        sortedWords.push_back(pair);
     }
+    std::sort(sortedWords.begin(), sortedWords.end(),
+        [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+            return a.second > b.second;
+        });
+}
 
-    void addWords(const std::vector<std::string>& words) {
-        for (const auto& word : words) {
-            addWord(word);
-        }
+void WordStatistics::calculateTotal() {
+    totalWords = 0;
+    for (const auto& pair : wordCount) {
+        totalWords += pair.second;
     }
+}
 
-    size_t getTotalWords() const { return totalWords; }
-    
-    size_t getWordCount(const std::string& word) const {
-        auto it = wordCount.find(word);
-        return (it != wordCount.end()) ? it->second : 0;
+std::vector<std::tuple<std::string, int, double>> WordStatistics::getStatistics() const {
+    std::vector<std::tuple<std::string, int, double>> result;
+    for (const auto& item : sortedWords) {
+        double percentage = (static_cast<double>(item.second) / totalWords) * 100.0;
+        result.emplace_back(item.first, item.second, percentage);
     }
-
-    const std::unordered_map<std::string, size_t>& getWordCountMap() const {
-        return wordCount;
-    }
-
-    void clear() {
-        wordCount.clear();
-        totalWords = 0;
-    }
-};
+    return result;
+}

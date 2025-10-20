@@ -1,25 +1,43 @@
-#pragma once
+#include "FileReader.h"
+#include <stdexcept>
 
-#include <string>
-#include <vector>
+FileReader::FileReader(const std::string& filename) : filename(filename), file(nullptr) {}
 
-class WordExtractor {
-public:
-    std::vector<std::string> extractWords(const std::string& line) const {
-        std::vector<std::string> words;
-        std::string currentWord;
-        
-        for (char c : line) {
-            if (std::isalnum(static_cast<unsigned char>(c))) {
-                currentWord += std::tolower(static_cast<unsigned char>(c));
-            } else if (!currentWord.empty()) {
-                words.push_back(currentWord);
-                currentWord.clear();
-            }
-        }
-        if (!currentWord.empty()) {
-            words.push_back(currentWord);
-        }
-        return words;
+void FileReader::open() {
+    if (file != nullptr) close();
+    file = new std::ifstream(filename);
+    if (!file->is_open()) {
+        throw std::runtime_error("Cannot open file: " + filename);
     }
-};
+}
+
+void FileReader::close() {
+    if (file != nullptr) {
+        file->close();
+        delete file;
+        file = nullptr;
+    }
+}
+
+bool FileReader::hasNext() {
+    return file != nullptr && !file->eof();
+}
+
+std::string FileReader::next() {
+    std::string line;
+    if (file != nullptr && std::getline(*file, line)) {
+        return line;
+    }
+    return "";
+}
+
+void FileReader::reset() {
+    if (file != nullptr) {
+        file->clear();
+        file->seekg(0);
+    }
+}
+
+FileReader::~FileReader() {
+    close();
+}
